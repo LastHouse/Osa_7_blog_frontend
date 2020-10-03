@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
 import loginService from './services/login';
@@ -7,16 +8,19 @@ import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import Footer from './components/Footer';
+import { setNotification } from './reducers/notificationReducer';
 
 const App = () => {
   const initialState = '';
   const [blogs, setBlogs] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [message, setMessage] = useState(null);
+  //const [errorMessage, setErrorMessage] = useState(null);
+  //const [message, setMessage] = useState(null);
   const [username, setUsername] = useState(initialState);
   const [password, setPassword] = useState(initialState);
   const [user, setUser] = useState(null);
   const addBlogRef = useRef();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -44,10 +48,7 @@ const App = () => {
       setUsername(initialState);
       setPassword(initialState);
     } catch (exception) {
-      setErrorMessage('wrong username or password!');
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      dispatch(setNotification('wrong username or password!', 5));
     }
   };
 
@@ -66,17 +67,11 @@ const App = () => {
       .create(newObject)
       .then((response) => {
         setBlogs([...blogs, response]);
-        setMessage(`${user.name} added a new blog`);
-        setTimeout(() => {
-          setMessage(null);
-        }, 5000);
+        dispatch(setNotification(`${user.name} added a new blog`, 5));
       })
       .catch((error) => {
         console.log(error.response.data.error);
-        setErrorMessage(error.response.data.error);
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 5000);
+        dispatch(setNotification(error.response.data.error, 5));
       });
   };
 
@@ -85,18 +80,12 @@ const App = () => {
       .like(id, newObject)
       .then((response) => {
         setBlogs(blogs.map((item) => (item.id !== id ? item : response)));
-        //console.log(response);
-        setMessage(`${user.name} added a new like`);
-        setTimeout(() => {
-          setMessage(null);
-        }, 5000);
+
+        dispatch(setNotification(`${user.name} added a new like`, 5));
       })
       .catch((error) => {
         console.log(error.response.data.error);
-        setErrorMessage(error.response.data.error);
-        setTimeout(() => {
-          setErrorMessage(null);
-        }, 5000);
+        dispatch(setNotification(error.response.data.error, 5));
       });
   };
 
@@ -107,18 +96,16 @@ const App = () => {
       blogService
         .deleteBlog(id)
         .then(() => {
-          setMessage(`the blog ${title} was deleted from server`);
-          setTimeout(() => {
-            setMessage(null);
-          }, 5000);
+          dispatch(
+            setNotification(`the blog ${title} was deleted from server`, 5)
+          );
+
           setBlogs(blogs.filter((n) => n.id !== id));
         })
         .catch((error) => {
           console.log(error.response.data.error);
-          setErrorMessage(error.response.data.error);
-          setTimeout(() => {
-            setErrorMessage(null);
-          }, 5000);
+          dispatch(setNotification(error.response.data.error, 5));
+
           setBlogs(blogs.filter((n) => n.id !== id));
         });
     }
@@ -155,8 +142,7 @@ const App = () => {
   return (
     <div>
       <h2>Blogs</h2>
-      <Notification message={errorMessage} />
-      <Notification message={message} />
+      <Notification />
 
       {user === null ? (
         loginForm()
