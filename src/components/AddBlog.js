@@ -1,68 +1,46 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { createBlog } from '../reducers/blogReducer';
+import { setNotification } from '../reducers/notificationReducer';
 
-const AddBlog = ({ createBlog }) => {
-  const initialState = '';
-  const [newTitle, setNewTitle] = useState(initialState);
-  const [newAuthor, setNewAuthor] = useState(initialState);
-  const [newUrl, setNewUrl] = useState(initialState);
+const AddBlog = ({ user }) => {
+  const dispatch = useDispatch();
 
-  const addBlog = (e) => {
+  const addBlog = async (e) => {
     e.preventDefault();
-    const newObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl,
-    };
-    createBlog(newObject);
-    setNewTitle(initialState);
-    setNewAuthor(initialState);
-    setNewUrl(initialState);
-  };
 
-  const handleTitleChange = (e) => {
-    setNewTitle(e.target.value);
-  };
-  const handleAuthorChange = (e) => {
-    setNewAuthor(e.target.value);
-  };
-  const handleUrlChange = (e) => {
-    setNewUrl(e.target.value);
+    const title = e.target.title.value;
+    e.target.title.value = '';
+    const author = e.target.author.value;
+    e.target.author.value = '';
+    const url = e.target.url.value;
+    e.target.url.value = '';
+
+    const newObject = {
+      title: title,
+      author: author,
+      url: url,
+    };
+
+    console.log(newObject);
+
+    dispatch(createBlog(newObject));
+    dispatch(setNotification(`${user.name} added a new blog`, 5));
   };
 
   return (
-    <div className="newBlogForm">
+    <div>
       {' '}
       <form onSubmit={addBlog}>
         <h2>Add new</h2>
         <div>
-          title:{' '}
-          <input
-            id="title"
-            type="text"
-            name="title"
-            value={newTitle}
-            onChange={handleTitleChange}
-          />
+          title: <input name="title" />
         </div>
         <div>
-          author:{' '}
-          <input
-            id="author"
-            type="text"
-            name="author"
-            value={newAuthor}
-            onChange={handleAuthorChange}
-          />
+          author: <input name="author" />
         </div>
         <div>
-          url:{' '}
-          <input
-            id="url"
-            type="text"
-            name="url"
-            value={newUrl}
-            onChange={handleUrlChange}
-          />
+          url: <input name="url" />
         </div>{' '}
         <div>
           <br></br>

@@ -1,8 +1,12 @@
 import React from 'react';
 import Togglable from './Togglable';
-//import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { setNotification } from '../reducers/notificationReducer';
+import { likeBlog, deleteBlog } from '../reducers/blogReducer';
 
-const Blog = ({ blog, likeBlog, delBlog, user }) => {
+const Blog = ({ blog, user }) => {
+  const dispatch = useDispatch();
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -11,12 +15,18 @@ const Blog = ({ blog, likeBlog, delBlog, user }) => {
     marginBottom: 5,
   };
 
-  const addLike = () => {
-    const likedBlog = {
-      ...blog,
-      likes: blog.likes + 1,
-    };
-    likeBlog(blog.id, likedBlog);
+  const addLike = (blog) => {
+    dispatch(likeBlog(blog));
+    dispatch(setNotification(`${user.name} added a new like`, 5));
+  };
+
+  const delBlog = (id, title) => {
+    if (
+      window.confirm(`Do you really want to delete ${title} from the list?`)
+    ) {
+      dispatch(deleteBlog(id));
+      dispatch(setNotification(`the blog ${title} was deleted from server`, 5));
+    }
   };
 
   return (
@@ -43,7 +53,7 @@ const Blog = ({ blog, likeBlog, delBlog, user }) => {
               url: {blog.url}
               <br></br>
               likes: {blog.likes}{' '}
-              <button id="like-button" onClick={addLike}>
+              <button id="like-button" onClick={() => addLike(blog)}>
                 like
               </button>
               <br></br>
@@ -69,10 +79,5 @@ const Blog = ({ blog, likeBlog, delBlog, user }) => {
     </div>
   );
 };
-
-/* Blog.propTypes = {
-  likeBlog: PropTypes.func.isRequired,
-  delBlog: PropTypes.func.isRequired,
-}; */
 
 export default Blog;
