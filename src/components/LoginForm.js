@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotification } from '../reducers/notificationReducer';
-import { logInUser, logOutUser } from '../reducers/userReducer';
+import { logInUser, logOutUser } from '../reducers/loginReducer';
 import Togglable from './Togglable';
 
 const LoginForm = () => {

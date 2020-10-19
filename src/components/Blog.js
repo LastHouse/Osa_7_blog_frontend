@@ -10,7 +10,7 @@ const Blog = ({ blog, user, addLike, delBlog }) => {
     marginBottom: 5,
   };
 
-  if (!blog && blog.user.name === undefined) {
+  if (!blog.user.name && blog.user.name === undefined) {
     console.log(blog);
     return <div>Fetching data...</div>;
   }
@@ -39,7 +39,7 @@ const Blog = ({ blog, user, addLike, delBlog }) => {
               url: {blog.url}
               <br></br>
               likes: {blog.likes}{' '}
-              <button id="like-button" onClick={() => addLike(blog.id)}>
+              <button id="like-button" onClick={() => addLike(blog)}>
                 like
               </button>
               <br></br>

@@ -1,53 +1,24 @@
-import loginService from '../services/login';
-import blogsService from '../services/blogs';
+import usersService from '../services/users';
 
-const loginReducer = (state = null, action) => {
+const userReducer = (state = [], action) => {
   console.log('state now: ', state);
   console.log('action', action);
   switch (action.type) {
-    case 'INIT_USER':
-      return action.data;
-    case 'LOGIN':
-      return action.data;
-    case 'LOGOUT':
+    case 'INIT_USERS':
       return action.data;
     default:
       return state;
   }
 };
 
-export const getCurrentUser = () => {
-  return (dispatch) => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
-    if (loggedUserJSON && loggedUserJSON !== 'undefined') {
-      const user = JSON.parse(loggedUserJSON);
-      blogsService.setToken(user.token);
-      console.log(user);
-      dispatch({
-        type: 'INIT_USER',
-        data: user,
-      });
-    }
-  };
-};
-
-export const logInUser = (credentials) => {
+export const initializeUsers = () => {
   return async (dispatch) => {
-    const user = await loginService.login(credentials);
+    const users = await usersService.getAll();
     dispatch({
-      type: 'LOGIN',
-      data: user,
+      type: 'INIT_USERS',
+      data: users,
     });
   };
 };
 
-export const logOutUser = () => {
-  return async (dispatch) => {
-    dispatch({
-      type: 'LOGOUT',
-      data: null,
-    });
-  };
-};
-
-export default loginReducer;
+export default userReducer;

@@ -1,16 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Blog from './Blog';
 import { useDispatch, useSelector } from 'react-redux';
-import { initializeBlogs } from '../reducers/blogReducer';
 import { setNotification } from '../reducers/notificationReducer';
 import { likeBlog, deleteBlog } from '../reducers/blogReducer';
 
 const BlogList = () => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(initializeBlogs());
-  }, [dispatch]);
 
   const blogs = useSelector((state) => state.blogs);
   const user = useSelector((state) => state.user);
