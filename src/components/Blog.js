@@ -1,12 +1,7 @@
 import React from 'react';
 import Togglable from './Togglable';
-import { useDispatch } from 'react-redux';
-import { setNotification } from '../reducers/notificationReducer';
-import { likeBlog, deleteBlog } from '../reducers/blogReducer';
 
-const Blog = ({ blog, user }) => {
-  const dispatch = useDispatch();
-
+const Blog = ({ blog, user, addLike, delBlog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -15,19 +10,10 @@ const Blog = ({ blog, user }) => {
     marginBottom: 5,
   };
 
-  const addLike = (blog) => {
-    dispatch(likeBlog(blog));
-    dispatch(setNotification(`${user.name} added a new like`, 5));
-  };
-
-  const delBlog = (id, title) => {
-    if (
-      window.confirm(`Do you really want to delete ${title} from the list?`)
-    ) {
-      dispatch(deleteBlog(id));
-      dispatch(setNotification(`the blog ${title} was deleted from server`, 5));
-    }
-  };
+  if (!blog && blog.user.name === undefined) {
+    console.log(blog);
+    return <div>Fetching data...</div>;
+  }
 
   return (
     <div>
@@ -53,7 +39,7 @@ const Blog = ({ blog, user }) => {
               url: {blog.url}
               <br></br>
               likes: {blog.likes}{' '}
-              <button id="like-button" onClick={() => addLike(blog)}>
+              <button id="like-button" onClick={() => addLike(blog.id)}>
                 like
               </button>
               <br></br>

@@ -28,15 +28,16 @@ const create = async (newObject) => {
     url: newObject.url,
   };
   const response = await axios.post(baseUrl, object, config);
+  console.log(response.data);
   return response.data;
 };
 
-const like = async (blog) => {
+const like = async (object) => {
   const config = {
     headers: { Authorization: token },
   };
-  const object = { ...blog, likes: blog.likes + 1 };
-  const response = await axios.put(`${baseUrl}/${blog.id}`, object, config);
+  const response = await axios.put(`${baseUrl}/${object.id}`, object, config);
+  console.log(response.data);
   return response.data;
 };
 
@@ -45,6 +46,7 @@ const del = async (id) => {
     headers: { Authorization: token },
   };
   const response = await axios.delete(`${baseUrl}/${id}`, config);
+  console.log(response.data);
   return response.data;
 };
 

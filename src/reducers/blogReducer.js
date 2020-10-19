@@ -11,16 +11,10 @@ const blogReducer = (state = [], action) => {
     case 'GET_BLOG':
       return action.data;
     case 'LIKE':
-      const likeById = action.data.id;
-      const blogToLike = state.find((a) => a.id === likeById);
-      const changedBlog = {
-        ...blogToLike,
-        likes: blogToLike.likes + 1,
-      };
-      return state.map((blog) => (blog.id !== likeById ? blog : changedBlog));
+      const liked = action.data;
+      return state.map((blog) => (blog.id === liked.id ? liked : blog));
     case 'DELETE':
-      return [...state, state.filter((blog) => blog !== action.data)];
-
+      return state.filter((blog) => blog.id !== action.data);
     default:
       return state;
   }
@@ -58,19 +52,20 @@ export const getBlog = (id) => {
 
 export const likeBlog = (blog) => {
   return async (dispatch) => {
-    const likedBlog = await blogsService.like(blog);
+    const toLike = { ...blog, likes: blog.likes + 1, user: blog.user.id };
+    const data = await blogsService.like(toLike);
     dispatch({
       type: 'LIKE',
-      data: likedBlog,
+      data,
     });
   };
 };
 export const deleteBlog = (id) => {
   return async (dispatch) => {
-    const deletedBlog = await blogsService.del(id);
+    await blogsService.del(id);
     dispatch({
       type: 'DELETE',
-      data: deletedBlog,
+      data: id,
     });
   };
 };
