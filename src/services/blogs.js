@@ -14,7 +14,6 @@ const getAll = async () => {
 
 const getOne = async (id) => {
   const response = await axios.get(`${baseUrl}/${id}`);
-  console.log(response.data);
   return response.data;
 };
 
@@ -28,7 +27,6 @@ const create = async (newObject) => {
     url: newObject.url,
   };
   const response = await axios.post(baseUrl, object, config);
-  console.log(response.data);
   return response.data;
 };
 
@@ -37,7 +35,6 @@ const like = async (object) => {
     headers: { Authorization: token },
   };
   const response = await axios.put(`${baseUrl}/${object.id}`, object, config);
-  console.log(response.data);
   return response.data;
 };
 

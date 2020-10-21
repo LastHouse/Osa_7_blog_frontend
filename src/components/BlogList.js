@@ -12,15 +12,15 @@ const BlogList = () => {
 
   const addLike = (id) => {
     const blogToLike = blogs.find((a) => a.id === id);
-    dispatch(likeBlog(blogToLike, blogs));
+    dispatch(likeBlog(blogToLike));
     dispatch(setNotification(`${user.name} added a new like`, 5));
   };
 
-  const delBlog = (id, blogs, title) => {
+  const delBlog = (id, title) => {
     if (
       window.confirm(`Do you really want to delete ${title} from the list?`)
     ) {
-      dispatch(deleteBlog(id, blogs));
+      dispatch(deleteBlog(id));
       dispatch(setNotification(`the blog ${title} was deleted from server`, 5));
     }
   };
