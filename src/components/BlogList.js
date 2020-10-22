@@ -1,29 +1,9 @@
 import React from 'react';
-import Blog from './Blog';
-import { useDispatch, useSelector } from 'react-redux';
-import { setNotification } from '../reducers/notificationReducer';
-import { likeBlog, deleteBlog } from '../reducers/blogReducer';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const BlogList = () => {
-  const dispatch = useDispatch();
-
   const blogs = useSelector((state) => state.blogs);
-  const user = useSelector((state) => state.user);
-
-  const addLike = (id) => {
-    const blogToLike = blogs.find((a) => a.id === id);
-    dispatch(likeBlog(blogToLike));
-    dispatch(setNotification(`${user.name} added a new like`, 5));
-  };
-
-  const delBlog = (id, title) => {
-    if (
-      window.confirm(`Do you really want to delete ${title} from the list?`)
-    ) {
-      dispatch(deleteBlog(id));
-      dispatch(setNotification(`the blog ${title} was deleted from server`, 5));
-    }
-  };
 
   const sortedBlogs = blogs.sort(function (a, b) {
     return b.likes - a.likes;
@@ -40,13 +20,11 @@ const BlogList = () => {
   return (
     <ul>
       {sortedBlogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          user={user}
-          addLike={addLike}
-          delBlog={delBlog}
-        />
+        <div className="blogStyle" key={blog.id}>
+          <Link to={`/posts/${blog.id}`}>
+            {blog.title} by {blog.author}
+          </Link>
+        </div>
       ))}
     </ul>
   );

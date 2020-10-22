@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import NavBar from './components/NavBar';
 import Notification from './components/Notification';
-import LoginForm from './components/LoginForm';
 import User from './components/User';
+import Blog from './components/Blog';
 import UserList from './components/UserList';
 import AddBlog from './components/AddBlog';
 import BlogList from './components/BlogList';
@@ -23,10 +23,16 @@ const App = () => {
   }, [dispatch]);
 
   const users = useSelector((state) => state.users);
+  const blogs = useSelector((state) => state.blogs);
 
-  const match = useRouteMatch('/users/:id');
-  const user = match
-    ? users.find((user) => user.id === String(match.params.id))
+  const userMatch = useRouteMatch('/users/:id');
+  const user = userMatch
+    ? users.find((user) => user.id === String(userMatch.params.id))
+    : null;
+
+  const blogMatch = useRouteMatch('/posts/:id');
+  const blog = blogMatch
+    ? blogs.find((blog) => blog.id === String(blogMatch.params.id))
     : null;
 
   return (
@@ -34,10 +40,12 @@ const App = () => {
       <NavBar />
       <h2>Blogs</h2>
       <Notification />
-      <LoginForm />
       <Switch>
         <Route path="/users/:id">
           <User user={user} />
+        </Route>
+        <Route path="/posts/:id">
+          <Blog blog={blog} />
         </Route>
         <Route path="/users">
           <UserList />

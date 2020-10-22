@@ -38,7 +38,6 @@ const LoginForm = () => {
       {user === null ? (
         <Togglable buttonLabel="login">
           <h2>Log in to application</h2>
-
           <form onSubmit={handleLogin}>
             <div>
               username: <input name="username" />

@@ -1,65 +1,75 @@
 import React from 'react';
-import Togglable from './Togglable';
+import { useDispatch, useSelector } from 'react-redux';
+import { setNotification } from '../reducers/notificationReducer';
+import { likeBlog, deleteBlog } from '../reducers/blogReducer';
 
-const Blog = ({ blog, user, addLike, delBlog }) => {
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch();
+
+  const blogs = useSelector((state) => state.blogs);
+  const user = useSelector((state) => state.user);
+
+  const addLike = (id) => {
+    const blogToLike = blogs.find((a) => a.id === id);
+    dispatch(likeBlog(blogToLike));
+    dispatch(setNotification(`${user.name} added a new like`, 5));
   };
 
-  if (!blog.user.name && blog.user.name === undefined) {
-    console.log(blog);
-    return <div>Fetching data...</div>;
+  const delBlog = (id, title) => {
+    if (
+      window.confirm(`Do you really want to delete ${title} from the list?`)
+    ) {
+      dispatch(deleteBlog(id));
+      dispatch(setNotification(`the blog ${title} was deleted from server`, 5));
+    }
+  };
+
+  console.log(blog);
+  if (!blog) {
+    return <div>Nothing to show</div>;
   }
 
   return (
     <div>
       {user === null ? (
-        <div style={blogStyle}>
+        <div className="blogStyle">
           {blog.title} by {blog.author}
-          <Togglable buttonLabel="show more">
-            <div>
-              url: {blog.url}
-              <br></br>
-              likes: {blog.likes}
-              <br></br>
-              added by: {blog.user.name}
-              <br></br>
-            </div>
-          </Togglable>
+          <div>
+            url: {blog.url}
+            <br></br>
+            likes: {blog.likes}
+            <br></br>
+            added by: {blog.user.name}
+            <br></br>
+          </div>
         </div>
       ) : (
-        <div style={blogStyle}>
+        <div className="blogStyle">
           {blog.title} by {blog.author}
-          <Togglable buttonLabel="show more">
-            <div>
-              url: {blog.url}
-              <br></br>
-              likes: {blog.likes}{' '}
-              <button id="like-button" onClick={() => addLike(blog.id)}>
-                like
-              </button>
-              <br></br>
-              added by: {blog.user.name}
-              <br></br>
-              {user.name !== blog.user.name ? (
-                ''
-              ) : (
-                <div>
-                  <br></br>
-                  <button
-                    id="remove-button"
-                    onClick={() => delBlog(blog.id, blog.title)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              )}
-            </div>
-          </Togglable>
+          <div>
+            url: {blog.url}
+            <br></br>
+            likes: {blog.likes}{' '}
+            <button id="like-button" onClick={() => addLike(blog.id)}>
+              like
+            </button>
+            <br></br>
+            added by: {blog.user.name}
+            <br></br>
+            {user.name !== blog.user.name ? (
+              ''
+            ) : (
+              <div>
+                <br></br>
+                <button
+                  id="remove-button"
+                  onClick={() => delBlog(blog.id, blog.title)}
+                >
+                  Remove
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

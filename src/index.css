@@ -1,5 +1,5 @@
 body {
-  padding: 2rem;
+  padding: 1rem;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -31,4 +31,47 @@ code {
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
+}
+
+.blogStyle {
+  padding: 10px;
+  border-style: solid;
+  border-radius: 5px;
+  border-width: 1px;
+  margin-bottom: 5px;
+}
+
+.navBar {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  background-color: lightgrey;
+  border-radius: 5px;
+}
+
+.form-inline {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  padding: 5px;
+}
+
+.link {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.form-inline button:hover {
+  background-color: royalblue;
+}
+
+@media (max-width: 800px) {
+  .form-inline input {
+    margin: 10px 0;
+  }
+
+  .form-inline {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
