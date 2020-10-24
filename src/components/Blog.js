@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotification } from '../reducers/notificationReducer';
 import { likeBlog, deleteBlog } from '../reducers/blogReducer';
+import { Link } from 'react-router-dom';
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch();
@@ -45,9 +46,11 @@ const Blog = ({ blog }) => {
         </div>
       ) : (
         <div className="blogStyle">
-          {blog.title} by {blog.author}
+          <h3>
+            {blog.title} by {blog.author}
+          </h3>
           <div>
-            url: {blog.url}
+            <Link>{blog.url}</Link>
             <br></br>
             likes: {blog.likes}{' '}
             <button id="like-button" onClick={() => addLike(blog.id)}>
@@ -56,6 +59,10 @@ const Blog = ({ blog }) => {
             <br></br>
             added by: {blog.user.name}
             <br></br>
+            <h3>comments:</h3>
+            {blog.comments.map((comment, i) => (
+              <li key={i}>{comment}</li>
+            ))}
             {user.name !== blog.user.name ? (
               ''
             ) : (

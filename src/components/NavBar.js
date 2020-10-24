@@ -43,7 +43,7 @@ const NavBar = () => {
           <Link className="link" to="/users">
             Users
           </Link>{' '}
-          <form class="form-inline" onSubmit={handleLogin}>
+          <form className="form-inline" onSubmit={handleLogin}>
             <div>Username: </div>
             <input className="link" name="username" />
             <div>Password: </div>
