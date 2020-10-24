@@ -13,6 +13,9 @@ const blogReducer = (state = [], action) => {
     case 'LIKE':
       const liked = action.data;
       return state.map((blog) => (blog.id === liked.id ? liked : blog));
+    case 'COMMENT':
+      const commented = action.data;
+      return state.map((blog) => (blog.id === commented.id ? commented : blog));
     case 'DELETE':
       return state.filter((blog) => blog.id !== action.data);
     default:
@@ -60,6 +63,17 @@ export const likeBlog = (blog) => {
     });
   };
 };
+
+export const commentBlog = (id, newObject) => {
+  return async (dispatch) => {
+    const data = await blogsService.comment(id, newObject);
+    dispatch({
+      type: 'COMMENT',
+      data,
+    });
+  };
+};
+
 export const deleteBlog = (id) => {
   return async (dispatch) => {
     await blogsService.del(id);

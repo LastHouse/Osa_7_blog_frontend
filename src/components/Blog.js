@@ -1,8 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotification } from '../reducers/notificationReducer';
-import { likeBlog, deleteBlog } from '../reducers/blogReducer';
-import { Link } from 'react-router-dom';
+import { likeBlog, deleteBlog, commentBlog } from '../reducers/blogReducer';
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch();
@@ -23,6 +22,22 @@ const Blog = ({ blog }) => {
       dispatch(deleteBlog(id));
       dispatch(setNotification(`the blog ${title} was deleted from server`, 5));
     }
+  };
+
+  const addComment = async (e, id) => {
+    e.preventDefault();
+    console.log(id);
+
+    //const blogToComment = blogs.find((a) => a.id === id);
+
+    const comment = e.target.comment.value;
+    e.target.comment.value = '';
+
+    const newObject = {
+      comments: comment,
+    };
+    dispatch(commentBlog(id, newObject));
+    dispatch(setNotification(`${user.name} added a new comment`, 5));
   };
 
   console.log(blog);
@@ -50,7 +65,9 @@ const Blog = ({ blog }) => {
             {blog.title} by {blog.author}
           </h3>
           <div>
-            <Link>{blog.url}</Link>
+            <a href={blog.url} target="blank">
+              {blog.url}
+            </a>
             <br></br>
             likes: {blog.likes}{' '}
             <button id="like-button" onClick={() => addLike(blog.id)}>
@@ -60,6 +77,10 @@ const Blog = ({ blog }) => {
             added by: {blog.user.name}
             <br></br>
             <h3>comments:</h3>
+            <form onSubmit={(e) => addComment(e, blog.id)}>
+              <input name="comment" />
+              <button type="submit">Add comment</button>
+            </form>
             {blog.comments.map((comment, i) => (
               <li key={i}>{comment}</li>
             ))}
