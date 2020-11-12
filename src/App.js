@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import NavBar from './components/NavBar';
+import Header from './components/Header';
 import Notification from './components/Notification';
+import Home from './components/Home';
 import User from './components/User';
 import Blog from './components/Blog';
 import UserList from './components/UserList';
-import AddBlog from './components/AddBlog';
 import BlogList from './components/BlogList';
 import Footer from './components/Footer';
 import { initializeBlogs } from './reducers/blogReducer';
@@ -37,8 +37,7 @@ const App = () => {
 
   return (
     <div>
-      <NavBar />
-      <h2>Blogs</h2>
+      <Header />
       <Notification />
       <Switch>
         <Route path="/users/:id">
@@ -50,10 +49,13 @@ const App = () => {
         <Route path="/users">
           <UserList />
         </Route>
-        <Route path="/">
-          <AddBlog />
+        <Route path="/posts">
           <BlogList />
         </Route>
+        <Route path="/">
+          <Home />
+        </Route>
+        <Route render={() => <h1>404 Page not found</h1>} />
       </Switch>
 
       <Footer />

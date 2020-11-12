@@ -1,13 +1,43 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import { clearNotification } from '../reducers/notificationReducer';
 
 const Notification = () => {
-  const notification = useSelector((state) => state.notification);
-  if (notification === null) {
-    return null;
-  }
+  const dispatch = useDispatch();
+  const notification = useSelector((state) => state.notification.data);
+  const show = useSelector((state) => state.notification.show);
 
-  return <div className="error">{notification}</div>;
+  const handleClose = () => {
+    dispatch(clearNotification());
+  };
+
+  return (
+    <Snackbar
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      open={show}
+      onClose={handleClose}
+      aria-describedby="client-snackbar"
+      message={notification}
+      action={
+        <React.Fragment>
+          <IconButton
+            key="close"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        </React.Fragment>
+      }
+    />
+  );
 };
 
 export default Notification;
