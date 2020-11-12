@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = () => {
   const classes = useStyles();
-  const [title, setTitle] = useState('Home');
+  const [, setTitle] = useState('Home');
   const [state, setState] = useState({
     top: false,
     left: false,

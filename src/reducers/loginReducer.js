@@ -2,8 +2,6 @@ import loginService from '../services/login';
 import blogsService from '../services/blogs';
 
 const loginReducer = (state = null, action) => {
-  console.log('state now: ', state);
-  console.log('action', action);
   switch (action.type) {
     case 'INIT_USER':
       return action.data;
@@ -22,7 +20,6 @@ export const getCurrentUser = () => {
     if (loggedUserJSON && loggedUserJSON !== 'undefined') {
       const user = JSON.parse(loggedUserJSON);
       blogsService.setToken(user.token);
-      console.log(user);
       dispatch({
         type: 'INIT_USER',
         data: user,

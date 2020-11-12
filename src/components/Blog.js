@@ -56,7 +56,6 @@ const Blog = ({ blog }) => {
     dispatch(setNotification(`${user.name} added a new comment`, 5));
   };
 
-  console.log(blog);
   if (!blog) {
     return <div>Nothing to show</div>;
   }
